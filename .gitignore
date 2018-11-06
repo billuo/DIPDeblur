@@ -1,4 +1,10 @@
 
 *.swp
+*.m~
 
+IQM/FRIQUEE/
+IQM/HOSA/
 IQM/ILNIQE/
+IQM/VIFP/
+IQM/VSNR/
+IQM/CORNIA/LIVE_soft_svm_model.mat

@@ -12,7 +12,8 @@ e.g. (in matlab console)
 >>iqm('NIQE', img)                  % Evaluates NIQE
 >>iqm('MDQE', blurred, deblurred)   % Evaluates MDQE (Liu et al.)
 
+Due to size limit, CORNIA/LIVE_soft_svm_model.mat is ignored in repository.It will be later uploaded elsewhere for downloading.
 
-        THIS IS A WORK IN PROGRESS!!!
-        THIS IS A WORK IN PROGRESS!!!
-        THIS IS A WORK IN PROGRESS!!!
+
+		NOTE: WORK IN PROGRESS!
+

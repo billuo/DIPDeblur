@@ -108,7 +108,7 @@ for s=1:nlevs-1
     img1 = img1(1:2:end,1:2:end);
     img2 = img2(1:2:end,1:2:end);
 
-    [~, ~, ~, comp_ssim] = ssim_index_modified(img1, img2, K);
+    [~, ~, ~, comp_ssim] = ssim_index_modified(img1, img2, K, [], 1.0);
     ssim_m = comp_ssim(1);         % Mean Component only needed for scale 5
     ssim_v(s+1) = comp_ssim(2);
     ssim_r(s+1) = comp_ssim(3);   

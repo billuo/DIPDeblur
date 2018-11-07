@@ -34,6 +34,7 @@ function iqm_configure()
         iqm_svm_predict = fullfile(iqm_path, 'Utilities', 'libsvm', 'windows', 'svm-predict.exe');
     end
     %% Compile PyrTools
+    disp('Compiling PytTools...');
     old_cd = cd(fullfile(iqm_path, 'Utilities', 'matlabPyrTools', 'MEX'));
     compilePyrTools();
     cd(old_cd);
@@ -52,21 +53,21 @@ end
 
 %% Metric bindings
 %#ok<*DEFNU> %functions below are mostly called through handles
+% NOTE they all get preprocessed images with dynamic range of 1.0 (double).
 
 %%% Full-referenced ones
 
 % These are implemented trivially
 function [MSE] = iqm_mse(img, img_ref)
-    MSE = mean(mean2((img - img_ref).^2));
+    MSE = mean(mean2(((img - img_ref).*255).^2));
 end
 
 function [SNR] = iqm_snr(img, img_ref)
-    [~, SNR] = psnr(img, img_ref, 255);
+    [~, SNR] = psnr(img, img_ref, 1);
 end
 
 function [PSNR] = iqm_psnr(img, img_ref)
-    assert(mean(mean2(img)) > 1);
-    [PSNR, ~] = psnr(img, img_ref, 255);
+    [PSNR, ~] = psnr(img, img_ref, 1);
 end
 
 % Bind to submodules
@@ -82,7 +83,7 @@ function [SSIM] = iqm_ssim(img, img_ref)
     global iqm_path;
     module_name = 'SSIM';
     addpath(genpath(fullfile(iqm_path, module_name)));
-    SSIM = ssim_index(img_ref, img);
+    SSIM = ssim_index(img_ref, img, [], [], 1.0);
     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 

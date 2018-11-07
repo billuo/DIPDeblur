@@ -109,17 +109,17 @@ function [ssim, ssim_map, map_obj, composite_mean_vec] = ssim_index_modified(img
 %========================================================================
 
 %% Default arguments
-if nargin < 3
+if nargin < 3 || isempty(varargin{1})
     K = [0.01, 0.03];
 else
     K = varargin{1};
 end
-if nargin < 4
+if nargin < 4 || isempty(varargin{2})
     window = fspecial('gaussian', 11, 1.5);
 else
     window = varargin{2};
 end
-if nargin < 5
+if nargin < 5 || isempty(varargin{3})
     L = 255;
 else
     L = varargin{3};
@@ -140,11 +140,12 @@ if H * W < 4 || H > M || W > N
     error('Size of image too small.');
 end
 %% Compute
+assert(isa(img1, 'double'));
+assert(isa(img2, 'double'));
+
 C1 = (K(1)*L)^2;
 C2 = (K(2)*L)^2;
 window = window/sum(sum(window));
-img1 = double(img1);
-img2 = double(img2);
 
 mu1   = filter2(window, img1, 'valid');
 mu2   = filter2(window, img2, 'valid');

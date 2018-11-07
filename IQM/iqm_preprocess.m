@@ -19,17 +19,9 @@ function processed_image = iqm_preprocess(metric_name, input_image)
             end
         end
     end
-    %% Cast to double and rescale if necessary
-    if isa(image, 'uint8')
-        if need_normalize(metric_name)
-            image = im2double(image); % im2double automatically rescale to [0, 1]
-        else
-            image = double(image);
-        end
-    elseif isa(image, 'double')
-        error('Image already is double. No good!');
-    else
-        error('Unsupported image type: ''%s''', class(image));
+    %% Cast to double
+    if ~isa(image, 'double')
+        image = im2double(image); % im2double automatically rescale to [0, 1]
     end
     %% Convert depth to 1 if necessary.
     [H, W, D] = size(image);
@@ -87,8 +79,4 @@ end
 function yes = need_padding(metric_name)
 % Return 1 if metric_name must operate on image of specific size, 0 otherwise.
     yes = ~isempty(find(string(metric_name) == ["VIF", "IFC", "VSNR"], 1));
-end
-
-function yes = need_normalize(metric_name)
-    yes = ~isempty(find(string(metric_name) == ["MDQE"], 1));
 end

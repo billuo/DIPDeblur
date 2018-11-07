@@ -1,4 +1,4 @@
-% NEWPYR = setPyrBand(PYR, INDICES, BAND, BAND_NUM)
+% NEWPYR = setPyrBand(PYR, INDICES, NEWBAND, BAND_NUM)
 %
 % Insert an image (BAND) into a pyramid (gaussian, laplacian, QMF/wavelet, 
 % or steerable).  Subbands are numbered consecutively, from finest
@@ -6,7 +6,7 @@
 
 % Eero Simoncelli, 1/03.
 
-function pyr =  pyrBand(pyr, pind, band, bandNum)
+function pyr =  setPyrBand(pyr, pind, band, bandNum)
 
 %% Check: PIND a valid index matrix?
 if ( ~(ndims(pind) == 2) | ~(size(pind,2) == 2) | ~all(pind==round(pind)) )

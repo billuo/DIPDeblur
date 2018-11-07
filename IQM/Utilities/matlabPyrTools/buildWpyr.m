@@ -15,7 +15,7 @@
 % to coarse.  INDICES is an Nx2 matrix containing the sizes of
 % each subband.  This is compatible with the MatLab Wavelet toolbox.
 
-% Eero Simoncelli, 6/96.
+% Eero Simoncelli, 6/96, based on original lisp code from 1987.
 
 function [pyr,pind] = buildWpyr(im, ht, filt, edges)
 

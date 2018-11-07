@@ -2,13 +2,10 @@ function qualityscore  = brisquescore(img)
     %% Check input
     assert(size(img, 3) == 1);
     assert(isa(img, 'double'));
-    %% TODO
-    error('Unimplemented');
     %% Compute
-    path_this = fileparts(which(mfilename));
-    old_pwd = pwd;
-    cd(path_this);
-    % Prepare input for LibSVM
+    old_cd = cd(fileparts(which(mfilename)));
+    delete output test test.scaled dump
+    %%% Prepare input for LibSVM
     feat = brisque_feature(img);
     fid = fopen('test', 'w');
     for jj = 1:size(feat, 1)
@@ -19,11 +16,13 @@ function qualityscore  = brisquescore(img)
         fprintf(fid, '\n');
     end
     fclose(fid);
-    % Call LibSVM
-    delete output
-    system('svm-scale -r all.scale test >test.scaled');
-    system('svm-predict -b 1 test.scaled all.model output.mat >dump');
-    qualityscore = load('output.mat');
+    %%% Call LibSVM
+    global iqm_svm_scale;
+    global iqm_svm_predict;
+
+    system([iqm_svm_scale ' -r all.scale test >test.scaled']);
+    system([iqm_svm_predict ' -b 1 test.scaled all.model output >dump']);
+    qualityscore = load('output', '-ascii');
     assert(isnumeric(qualityscore));
-    cd(old_pwd);
+    cd(old_cd);
 end

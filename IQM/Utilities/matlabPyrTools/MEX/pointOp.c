@@ -24,51 +24,51 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   double origin, increment;
   int x_dim, y_dim, lx_dim, ly_dim;
   int warnings = 1;
-  mxArray *arg;
+  const mxArray *arg0,*arg1,*arg2,*arg3,*arg4;
   double *mxMat;
 
   if (nrhs < 4 ) mexErrMsgTxt("requres  at least 4 args.");
 
   /* ARG 1: IMAGE  */
-  arg = prhs[0];
-  if notDblMtx(arg) mexErrMsgTxt("IMAGE arg must be a real non-sparse matrix.");
-  image = mxGetPr(arg);
-  x_dim = (int) mxGetM(arg); /* X is inner index! */
-  y_dim = (int) mxGetN(arg);
+  arg0 = prhs[0];
+  if notDblMtx(arg0) mexErrMsgTxt("IMAGE arg must be a real non-sparse matrix.");
+  image = mxGetPr(arg0);
+  x_dim = (int) mxGetM(arg0); /* X is inner index! */
+  y_dim = (int) mxGetN(arg0);
 
   /* ARG 2: Lookup table */
-  arg = prhs[1];
-  if notDblMtx(arg) mexErrMsgTxt("LUT arg must be a real non-sparse matrix.");
-  lut = mxGetPr(arg);
-  lx_dim = (int) mxGetM(arg); /* X is inner index! */
-  ly_dim = (int) mxGetN(arg);
+  arg1 = prhs[1];
+  if notDblMtx(arg1) mexErrMsgTxt("LUT arg must be a real non-sparse matrix.");
+  lut = mxGetPr(arg1);
+  lx_dim = (int) mxGetM(arg1); /* X is inner index! */
+  ly_dim = (int) mxGetN(arg1);
   if ( (lx_dim != 1) && (ly_dim != 1) )
     mexErrMsgTxt("Lookup table must be a row or column vector.");
 
   /* ARG 3: ORIGIN */
-  arg = prhs[2];
-  if notDblMtx(arg) mexErrMsgTxt("ORIGIN arg must be a real scalar.");
-  if (mxGetM(arg) * mxGetN(arg) != 1)
+  arg2 = prhs[2];
+  if notDblMtx(arg2) mexErrMsgTxt("ORIGIN arg must be a real scalar.");
+  if (mxGetM(arg2) * mxGetN(arg2) != 1)
      mexErrMsgTxt("ORIGIN arg must be a real scalar.");
-  mxMat = mxGetPr(arg);
+  mxMat = mxGetPr(arg2);
   origin = *mxMat;
 
   /* ARG 4: INCREMENT */
-  arg = prhs[3];
-  if notDblMtx(arg) mexErrMsgTxt("INCREMENT arg must be a real scalar.");
-  if (mxGetM(arg) * mxGetN(arg) != 1)
+  arg3 = prhs[3];
+  if notDblMtx(arg3) mexErrMsgTxt("INCREMENT arg must be a real scalar.");
+  if (mxGetM(arg3) * mxGetN(arg3) != 1)
      mexErrMsgTxt("INCREMENT arg must be a real scalar.");
-  mxMat = mxGetPr(arg);
+  mxMat = mxGetPr(arg3);
   increment = *mxMat;
 
   /* ARG 5: WARNINGS */
   if (nrhs>4)
     {
-    arg = prhs[4];
-    if notDblMtx(arg) mexErrMsgTxt("WARINGS arg must be a real scalar.");
-    if (mxGetM(arg) * mxGetN(arg) != 1)
+    arg4 = prhs[4];
+    if notDblMtx(arg4) mexErrMsgTxt("WARINGS arg must be a real scalar.");
+    if (mxGetM(arg4) * mxGetN(arg4) != 1)
       mexErrMsgTxt("WARNINGS arg must be a real scalar.");
-    mxMat = mxGetPr(arg);
+    mxMat = mxGetPr(arg4);
     warnings = (int) *mxMat;
     }
 

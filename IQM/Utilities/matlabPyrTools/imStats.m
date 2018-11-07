@@ -1,8 +1,9 @@
 % imStats(IM1,IM2)
 %
 % Report image (matrix) statistics.
-% When called on a single image IM1, report min, max, mean, stdev, 
-% and kurtosis.
+% When called on a single image IM1, report min, max, mean, stdev, skew,
+% and kurtosis (4th moment about the mean, divided by squared variance)
+%
 % When called on two images (IM1 and IM2), report min, max, mean, 
 % stdev of the difference, and also SNR (relative to IM1).
 
@@ -31,11 +32,12 @@ if (exist('im2') == 1)
 else
   [mn,mx] = range2(im1);
   mean = mean2(im1);
-  var = var2(im1);  
+  var = var2(im1,mean);  
   stdev = sqrt(real(var))+sqrt(imag(var));
+  sk = skew2(im1, mean, stdev^2);
   kurt = kurt2(im1, mean, stdev^2);
   fprintf(1, 'Image statistics:\n');
   fprintf(1, '  Range: [%f, %f]\n',mn,mx);
-  fprintf(1, '  Mean: %f,  Stdev: %f,  Kurtosis: %f\n',mean,stdev,kurt);
+  fprintf(1, '  Mean: %f,  Stdev: %f,  Skew: %f,  Kurt: %f\n',mean,stdev,sk,kurt);
 end
   

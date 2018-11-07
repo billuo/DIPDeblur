@@ -1,10 +1,12 @@
-% Image and Multi-scale Pyramid Tools
-% Version 1.3,  October 2004.
-% Created: Early Spring, 1996. Eero Simoncelli, eero.simoncelli@nyu.edu
+% matlabPyrTools: Image and Multi-scale Pyramid Tools
+% Version: 1.4, December-2009.
+% Created: Early Spring, 1996. 
+% Author:  Eero Simoncelli, eero.simoncelli@nyu.edu
 %
 % See README file for brief description.
 % See ChangeLog file for latest modifications. 
 % See TUTORIALS subdirectory for demonstrations.
+% Type "help matlabPyrTools" to see this file as documentation.
 % Type "help <command-name>" for documentation on individual commands.
 % -----------------------------------------------------------------
 % Synthetic Images (matrices):

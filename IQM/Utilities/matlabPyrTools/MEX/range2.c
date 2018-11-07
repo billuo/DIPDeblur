@@ -21,7 +21,7 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   register double temp, mn, mx;
   register double *mtx;
   register int i, size;
-  mxArray *arg;
+  const mxArray *arg;
 
   if (nrhs != 1) mexErrMsgTxt("requires 1 argument.");
 

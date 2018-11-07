@@ -1,12 +1,11 @@
 % RES = innerProd(MTX)
 %
 % Compute (MTX' * MTX) efficiently (i.e., without copying the matrix)
+%
+% NOTE: This function used to call a MEX function (C code) to avoid copying, but
+% newer versions of matlab have eliminated the overhead of the
+% simpler form below. 
 
 function res = innerProd(mtx)
-
-fprintf(1,['WARNING: You should compile the MEX version of' ...
-	   ' "innerProd.c",\n         found in the MEX subdirectory' ...
-	   ' of matlabPyrTools, and put it in your matlab path.' ...
-	   ' It is MUCH faster and requires less memory.\n']);
 
 res = mtx' * mtx;

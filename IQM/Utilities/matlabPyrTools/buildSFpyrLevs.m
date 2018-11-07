@@ -32,7 +32,7 @@ else
 
   for b = 1:nbands
     anglemask = pointOp(angle, Ycosn, Xcosn(1)+pi*(b-1)/nbands, Xcosn(2)-Xcosn(1));
-    banddft = ((-sqrt(-1))^(nbands-1)) .* lodft .* anglemask .* himask;
+    banddft = ((-sqrt(-1))^order) .* lodft .* anglemask .* himask;
     band = ifft2(ifftshift(banddft));
 
     bands(:,b) = real(band(:));

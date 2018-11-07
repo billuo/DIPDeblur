@@ -24,8 +24,13 @@ if (exist('cov') ~= 1)
   cov = (min(sz(1),sz(2))/6)^2;
 end
 
-if (exist('mn') ~= 1)
+if ( (exist('mn') ~= 1) | isempty(mn) )
   mn = (sz+1)/2;
+else
+  mn = mn(:);
+  if (size(mn,1) == 1)
+    mn = [mn, mn];
+  end
 end
 
 if (exist('ampl') ~= 1)

@@ -11,5 +11,5 @@ load('CSIQ_whitening_param.mat','M','P');
 svm_model = soft_model;
 svm_scale = soft_scale_param;
 
-score = CORNIA(img, codebook0, 'soft', svm_model, svm_scale, M, P);
+score = cornia(img, codebook0, 'soft', svm_model, svm_scale, M, P);
 

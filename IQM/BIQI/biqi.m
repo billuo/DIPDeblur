@@ -74,129 +74,131 @@ function [quality probs] = biqi(im)
 % Data files: range2, range2_wn, range2_blur, range2_jp2k, model_89,
 % model_89_wn, model_89_blur, model_89_jp2k, rang2_ff model_ff
 %========================================================================
+    assert(size(im, 3) == 1);
 
+    %% First compute statistics
+    num_scales = 3; % somethings are hardcoded for this...please be careful when changing.
+    gam = 0.2:0.001:10;
+    r_gam = gamma(1./gam).*gamma(3./gam)./(gamma(2./gam)).^2;
 
-if(size(im,3)~=1)
-    im = rgb2gray(im);
-end
+    [C, S] = wavedec2(im,num_scales,'db9');
+    for p = 1:num_scales
+        [horz_temp,vert_temp,diag_temp] = detcoef2('all',C,S,p) ;
+        horz(p) = {[horz_temp(:)]};
+        diag(p) = {[diag_temp(:)]};
+        vert(p) = {[vert_temp(:)]};
 
-%% First compute statistics
-num_scales = 3; % somethings are hardcoded for this...please be careful when changing.
-gam = 0.2:0.001:10;
-r_gam = gamma(1./gam).*gamma(3./gam)./(gamma(2./gam)).^2;
+        h_horz_curr  = cell2mat(horz(p));
+        h_vert_curr  = cell2mat(vert(p));
+        h_diag_curr  = cell2mat(diag(p));
 
-[C S] = wavedec2(im,num_scales,'db9');
-for p = 1:num_scales
-    [horz_temp,vert_temp,diag_temp] = detcoef2('all',C,S,p) ;
-    horz(p) = {[horz_temp(:)]};
-    diag(p) = {[diag_temp(:)]};
-    vert(p) = {[vert_temp(:)]};
+        mu_horz(p) = mean(h_horz_curr);
+        sigma_sq_horz(p)  = mean((h_horz_curr-mu_horz(p)).^2);
+        E_horz = mean(abs(h_horz_curr-mu_horz(p)));
+        rho_horz = sigma_sq_horz(p)/E_horz^2;
+        [min_difference, array_position] = min(abs(rho_horz - r_gam));
+        gam_horz(p) = gam(array_position);
 
-    h_horz_curr  = cell2mat(horz(p));
-    h_vert_curr  = cell2mat(vert(p));
-    h_diag_curr  = cell2mat(diag(p));
+        mu_vert(p) = mean(h_vert_curr);
+        sigma_sq_vert(p)  = mean((h_vert_curr-mu_vert(p)).^2);
+        E_vert = mean(abs(h_vert_curr-mu_vert(p)));
+        rho_vert = sigma_sq_vert(p)/E_vert^2;
+        [min_difference, array_position] = min(abs(rho_vert - r_gam));
+        gam_vert(p) = gam(array_position);
 
-    mu_horz(p) = mean(h_horz_curr);
-    sigma_sq_horz(p)  = mean((h_horz_curr-mu_horz(p)).^2);
-    E_horz = mean(abs(h_horz_curr-mu_horz(p)));
-    rho_horz = sigma_sq_horz(p)/E_horz^2;
-    [min_difference, array_position] = min(abs(rho_horz - r_gam));
-    gam_horz(p) = gam(array_position);
-
-    mu_vert(p) = mean(h_vert_curr);
-    sigma_sq_vert(p)  = mean((h_vert_curr-mu_vert(p)).^2);
-    E_vert = mean(abs(h_vert_curr-mu_vert(p)));
-    rho_vert = sigma_sq_vert(p)/E_vert^2;
-    [min_difference, array_position] = min(abs(rho_vert - r_gam));
-    gam_vert(p) = gam(array_position);
-
-    mu_diag(p) = mean(h_diag_curr);
-    sigma_sq_diag(p)  = mean((h_diag_curr-mu_diag(p)).^2);
-    E_diag = mean(abs(h_diag_curr-mu_diag(p)));
-    rho_diag = sigma_sq_diag(p)/E_diag^2;
-    [min_difference, array_position] = min(abs(rho_diag - r_gam));
-    gam_diag(p) = gam(array_position);
-end
-rep_vec = [mu_horz mu_vert mu_diag sigma_sq_horz sigma_sq_vert sigma_sq_diag gam_horz gam_vert gam_diag];
-rep_vec(:,1:9) = []; % remove the means...
-%% Now classify
-
-fid = fopen('test_ind.txt','w');
-for j = 1:size(rep_vec,1)
-    fprintf(fid,'%d ',j);
-    for k = 1:size(rep_vec,2)
-        fprintf(fid,'%d:%f ',k,rep_vec(j,k));
+        mu_diag(p) = mean(h_diag_curr);
+        sigma_sq_diag(p)  = mean((h_diag_curr-mu_diag(p)).^2);
+        E_diag = mean(abs(h_diag_curr-mu_diag(p)));
+        rho_diag = sigma_sq_diag(p)/E_diag^2;
+        [min_difference, array_position] = min(abs(rho_diag - r_gam));
+        gam_diag(p) = gam(array_position);
     end
-    fprintf(fid,'\n');
-end
-fclose(fid);
-
- system(['svm-scale -r range2 test_ind.txt >> test_ind_scaled']);
-system(['svm-predict -b 1 test_ind_scaled model_89 output_89']);
-delete test_ind.txt test_ind_scaled
-
-%% Quality along each dimension
-
-% Write out SVM compatible
-
-fid = fopen('test_ind.txt','w');
-for j = 1:size(rep_vec,1)
-    fprintf(fid,'%f ',j);
-    for k = 1:size(rep_vec,2)
-        fprintf(fid,'%d:%f ',k,rep_vec(j,k));
+    rep_vec = [mu_horz mu_vert mu_diag sigma_sq_horz sigma_sq_vert sigma_sq_diag gam_horz gam_vert gam_diag];
+    rep_vec(:,1:9) = []; % remove the means...
+    %% Now classify
+    old_cd = cd;
+    cd(fileparts(which(mfilename)));
+    
+    fid = fopen('test_ind', 'w');
+    for j = 1:size(rep_vec, 1)
+        fprintf(fid, '%d ', j);
+        for k = 1:size(rep_vec, 2)
+            fprintf(fid, '%d:%f ', k, rep_vec(j, k));
+        end
+        fprintf(fid, '\n');
     end
-    fprintf(fid,'\n');
+    fclose(fid);
+
+    global iqm_svm_scale;
+    global iqm_svm_predict;
+
+    system([iqm_svm_scale ' -r range2 test_ind > test_ind_scaled']);
+    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89 output_89']);
+    delete test_ind
+
+    %% Quality along each dimension
+
+    % Write out SVM compatible
+
+    fid = fopen('test_ind','w');
+    for j = 1:size(rep_vec,1)
+        fprintf(fid,'%f ',j);
+        for k = 1:size(rep_vec,2)
+            fprintf(fid,'%d:%f ',k,rep_vec(j,k));
+        end
+        fprintf(fid,'\n');
+    end
+    fclose(fid);
+
+    % Jp2k quality
+    system([iqm_svm_scale ' -r range2_jp2k test_ind > test_ind_scaled']);
+    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_jp2k output_blur']);
+    load output_blur
+    jp2k_score = output_blur;
+    delete output_blur
+
+    % JPEG quality
+    jpeg_score  = jpeg_quality_score(im);
+
+
+    % WN quality
+    system([iqm_svm_scale ' -r range2_wn test_ind > test_ind_scaled']);
+    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_wn output_blur']);
+    load output_blur
+    wn_score = output_blur;
+    delete output_blur
+
+
+    % Blur quality
+    system([iqm_svm_scale ' -r range2_blur test_ind > test_ind_scaled']);
+    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_blur output_blur']);
+    load output_blur
+    blur_score = output_blur;
+    delete output_blur
+
+    % FF quality
+    system([iqm_svm_scale ' -r range2_ff test_ind > test_ind_scaled']);
+    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_ff output_blur']);
+    load output_blur
+    ff_score = output_blur;
+
+
+    delete output_blur
+    delete test_ind
+
+
+    %% Final pooling
+
+    % figure out probabilities
+    fid = fopen('output_89','r');
+    fgetl(fid);
+    C = textscan(fid,'%f %f %f %f %f %f');
+    output = [C{1} C{2} C{3} C{4} C{5} C{6}];
+    fclose(fid);
+    probs = output(:,2:end);
+    scores  = [jp2k_score jpeg_score wn_score blur_score ff_score];
+    quality = sum(probs.*scores,2);
+    delete output_89
+    cd(old_cd);
+
 end
-fclose(fid);
-
-% Jp2k quality
-system(['svm-scale -r range2_jp2k test_ind.txt >> test_ind_scaled']);
-system(['svm-predict  -b 1 test_ind_scaled model_89_jp2k output_blur']);
-load output_blur
-jp2k_score = output_blur;
-delete output_blur test_ind_scaled
-
-% JPEG quality
-jpeg_score  = jpeg_quality_score(im);
-
-
-% WN quality
-system(['svm-scale -r range2_wn test_ind.txt >> test_ind_scaled']);
-system(['svm-predict -b 1 test_ind_scaled model_89_wn output_blur']);
-load output_blur
-wn_score = output_blur;
-delete output_blur test_ind_scaled
-
-
-% Blur quality
-system(['svm-scale -r range2_blur test_ind.txt >> test_ind_scaled']);
-system(['svm-predict  -b 1 test_ind_scaled model_89_blur output_blur']);
-load output_blur
-blur_score = output_blur;
-delete output_blur test_ind_scaled
-
-% FF quality
-system(['svm-scale -r range2_ff test_ind.txt >> test_ind_scaled']);
-system(['svm-predict  -b 1 test_ind_scaled model_89_ff output_blur']);
-load output_blur
-ff_score = output_blur;
-
-
-delete output_blur
-delete test_ind.txt test_ind_scaled
-
-
-%% Final pooling
-
-% figure out probabilities
-fid = fopen('output_89','r');
-fgetl(fid);
-C = textscan(fid,'%f %f %f %f %f %f');
-output = [C{1} C{2} C{3} C{4} C{5} C{6}];
-fclose(fid);
-probs = output(:,2:end);
-scores  = [jp2k_score jpeg_score wn_score blur_score ff_score];
-quality = sum(probs.*scores,2);
-delete output_89 
-clc
-

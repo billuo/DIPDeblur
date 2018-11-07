@@ -1,7 +1,51 @@
 	   Log of changes made to matlabPyrTools code
 		(important changes marked with **)
 -----------------------------------------------------------------------	
-2004-10-14  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+2009-12-17  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* Made new tarfile (version 1.4) 
+
+	* imStats.m: Now also prints the skew.
+
+2009-12-17  Rob Young  <ryoung@cns.nyu.edu>
+	
+	* Fixed compilePyrTools.m error messages by making individual
+	const mxArray arg variables.
+	
+2009-12-17  Rob Young  <ryoung@cns.nyu.edu>
+
+	* Added compilePyrTools.m to the MEX directory, which takes care
+	of compiling all C files for the current platform.
+	
+2009-12-17  Rob Young  <ryoung@cns.nyu.edu>
+
+	* Incorporated HTML versions of tutorials
+	
+2005-07-01  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* Discovered that innerProd.c is now significantly slower than
+	just executing M'*M in matlab, due to speedups in recent versions
+	of matlab!  So eliminated the MEX file, and the warning in
+	innerProd.m.  Left innerProd.m behind for backward compatibility.
+	
+
+2005-05-04  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* Fixed blur.m to handle arbitrary size images
+
+2005-01-03  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* MEX/Makefile-linux: Added innerProd to Make files
+
+2004-11-28  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* blur.m (res): added missing arguments in call to upBlur.
+	
+2004-10-27  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+
+	* mkGaussian.m: MEAN arg can now be 1D.
+
+2004-10-14  Eero Simoncelli
 
 	* Made new tarfile (version 1.3) 
 	
@@ -15,15 +59,15 @@
 	
 	* reagan.pgm out.  feynam.pgm in
 	
-2004-03-20  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+2004-03-20  Eero Simoncelli
 
 	* blur.m added (just calls blurDn and then upBlur).
 	
-2003-08-06  Eero Simoncelli  <eero@sesto.cns.nyu.edu>
+2003-08-06  Eero Simoncelli
 
 	* blurDn.m (filt): Forced correct scaling of filters in  1D
 
-2003-05-28  Eero Simoncelli  <eero@ferrando.cns.nyu.edu>
+2003-05-28  Eero Simoncelli
 
 	* incorporated setPyrBand.m from local code
 
@@ -138,7 +182,7 @@ Thu Aug 21 13:34:17 1997  Eero Simoncelli  <eero@chrysothemis.cims.nyu.edu>
 	* var2, skew2, kurt2: modified to return complex values for complex images.
 	* imStats.m: now gives an error for complex args.
 
-Thu Aug 14 15:24:29 1997  Eero Simoncelli  <eero@servilia.cns.nyu.edu>
+Thu Aug 14 15:24:29 1997  Eero Simoncelli  <eero@chrysothemis.cims.nyu.edu>
 
 	* Modified shift.m: negated the meaning of the offset parameter,
 	such that RES=shift(MTX,OFFSET) means RES(POS)=MTX(POS-OFFSET)
@@ -165,7 +209,7 @@ Mon Jun 30 12:09:30 1997  Eero Simoncelli  <eero@servilia.cns.nyu.edu>
 	* reconSpyrLevs.m (maxLev): got rid of superfluous nbands argument
  	(can be calculated from bfilts).
 
-Mon May 26 12:29:54 1997  Eero Simoncelli  <eero@servilia.cns.nyu.edu>
+Mon May 26 12:29:54 1997  Eero Simoncelli  <eero@chrysothemis.cims.nyu.edu>
 
 	* showIm.m/pgmWrite.m: Modified 'auto3'-scaling to use a
  	histogram.  This gives a significant speedup.
@@ -305,7 +349,7 @@ Wed Mar 19 14:19:51 1997  Eero Simoncelli  <eero@servilia.cns.nyu.edu>
 
 	* Changed directory name: MEX_SRC -> MEX
 
-Wed Mar 12 17:00:03 1997  Eero Simoncelli  <eero@servilia.cns.nyu.edu>
+Wed Mar 12 17:00:03 1997  Eero Simoncelli  <eero@chrysothemis.cims.nyu.edu>
 
 	* mkGaussian.m: fixed another (X,Y) bug: both dimensions and 
 	cov/mean are now specified in [y,x] order.
@@ -421,8 +465,12 @@ Wed Aug 19 20:39:15 1996  Eero Simoncelli  (eero@tarpon.cis.upenn.edu)
 Fri Aug  2 00:56:31 1996  Eero Simoncelli  (eero@tarpon.cis.upenn.edu)
 
 	* Changed all function/file-names to be of the form "fooBar".  *
- 	Fixed entropy2.m (busted due to typo).
+	Fixed entropy2.m (busted due to typo).
 
+Most matlab code was developed from 1992-1996, while the author was an
+assistant professor of Computer and Information Science at University of
+Pennsylvania. 
+	
 Original convolution code was written in Spring 1986, and comes from
 OBVIUS (Object-Based Vision and Image Understanding System), an
 interactive image-processing system written in Common Lisp (with calls

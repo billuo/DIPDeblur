@@ -72,10 +72,12 @@ end
 
 
 feat                     = [feat feat_scale];
-%dbstop if any(reshape(isnan(feat), 1, []))
-if any(reshape(isnan(feat), 1, []))
-    error('itr_scale=%i', itr_scale);
-end
+
+%%% DEBUG
+%if any(reshape(isnan(feat), 1, []))
+%    error('DEBUG: itr_scale=%i', itr_scale);
+%end
+
 im =imresize(im,0.5);
 
 end
@@ -89,7 +91,7 @@ cov_distparam    = nancov(distparam);
 
 % Compute quality
 pinv_arg = (cov_prisparam+cov_distparam)/2;
-assert(~any(reshape(isnan(pinv_arg), 1, [])));
+%assert(~any(reshape(isnan(pinv_arg), 1, [])));
 invcov_param     = pinv(pinv_arg);
 quality = sqrt((mu_prisparam-mu_distparam)* ...
     invcov_param*(mu_prisparam-mu_distparam)');

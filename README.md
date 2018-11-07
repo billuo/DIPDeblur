@@ -19,7 +19,7 @@ Supports easy image quality evaluation with 16+ flavours, namely:
     * NQM
     * UIQI
     * VIF
-2. No-reference metrics **TODO: not yet well integrated**
+2. No-reference metrics 
     * BIQI
     * BLIINDS2
     * BRISQUE
@@ -29,8 +29,10 @@ Supports easy image quality evaluation with 16+ flavours, namely:
     * SSEQ
     * Liu et al.
 
+**TODO: Only a few of them works! Fix them (refer to IQM/README.txt for details)**
+
 For its usage, refer to in-source documentation in 'IQM/iqm\*.m'.
 
-Note the list of quality metrics supported here is the superset *(not yet)* of that compared in:
+Note the list of quality metrics supported here is the superset of that compared in:
 
 *Wei-Sheng Lai, Jia-Bin Huang, Zhe Hu, Narendra Ahuja, and Ming-Hsuan Yang, A Comparative Study for Single Image Blind Deblurring, IEEE Conference on Computer Vision and Pattern Recognition, 2016.*

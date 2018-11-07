@@ -28,16 +28,16 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   register double origin, *hist, mn, mx, mean;
   register int nbins;
   double *bincenters; 
-  mxArray *arg;
+  const mxArray *arg0,*arg1,*arg2;
   double *mxMat;
 
   if (nrhs < 1 ) mexErrMsgTxt("requires at least 1 argument.");
 
   /* ARG 1: MATRIX  */
-  arg = prhs[0];
-  if notDblMtx(arg) mexErrMsgTxt("MTX arg must be a real non-sparse matrix.");
-  im = mxGetPr(arg);
-  size = (int) mxGetM(arg) * mxGetN(arg);
+  arg0 = prhs[0];
+  if notDblMtx(arg0) mexErrMsgTxt("MTX arg must be a real non-sparse matrix.");
+  im = mxGetPr(arg0);
+  size = (int) mxGetM(arg0) * mxGetN(arg0);
 
   /* FIND min, max, mean values of MTX */
   mn = *im;   mx = *im;  binsize = 0;
@@ -55,11 +55,11 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   /* ARG 3: BIN_CENTER */
   if (nrhs > 2)
     {
-    arg = prhs[2];
-    if notDblMtx(arg) mexErrMsgTxt("BIN_CENTER arg must be a real scalar.");
-    if (mxGetM(arg) * mxGetN(arg) != 1)
+    arg2 = prhs[2];
+    if notDblMtx(arg2) mexErrMsgTxt("BIN_CENTER arg must be a real scalar.");
+    if (mxGetM(arg2) * mxGetN(arg2) != 1)
       mexErrMsgTxt("BIN_CENTER must be a real scalar.");
-    mxMat= mxGetPr(arg);
+    mxMat= mxGetPr(arg2);
     origin = *mxMat;
     }
   else
@@ -68,11 +68,11 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   /* ARG 2: If positive, NBINS.  If negative, -BINSIZE. */
   if (nrhs > 1)
     {
-    arg = prhs[1];
-    if notDblMtx(arg) mexErrMsgTxt("NBINS_OR_BINSIZE arg must be a real scalar.");
-    if (mxGetM(arg) * mxGetN(arg) != 1)
+    arg1 = prhs[1];
+    if notDblMtx(arg1) mexErrMsgTxt("NBINS_OR_BINSIZE arg must be a real scalar.");
+    if (mxGetM(arg1) * mxGetN(arg1) != 1)
       mexErrMsgTxt("NBINS_OR_BINSIZE must be a real scalar.");
-    mxMat= mxGetPr(arg);
+    mxMat= mxGetPr(arg1);
     binsize = *mxMat;
     }
   else

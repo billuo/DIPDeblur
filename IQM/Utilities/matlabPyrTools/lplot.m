@@ -26,7 +26,7 @@ if (~isreal(x))
 end
 
 N = length(x);
-index = xrange(1) + (xrange(2)-xrange(1))*[0:(N-1)]/(N-1)
+index = xrange(1) + (xrange(2)-xrange(1))*[0:(N-1)]/(N-1);
 xinc = index(2)-index(1);
 
 xx = [zeros(1,N);x;zeros(1,N)];

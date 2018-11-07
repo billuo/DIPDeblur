@@ -3,21 +3,7 @@ function [metric] = iqm(name, img, varargin)
 % _name_:       Metric name, char/string array.
 % _img_:        Input image, can be of any depth and dimensions.
 % _img_ref_:    Reference image (optional), must be of the same dimension as _img_.
-%
-%   algorithm                       name
-%   ---------------------------     ----------------
-%   mean-squared error              'MSE'
-%   peak signal-to-noise ratio      'PSNR'
-%   structural similarity index     'SSIM'
-%   multiscale SSIM index           'MSSIM'
-%   visual signal-to-noise ratio    'VSNR'
-%   visual information fidelity     'VIF'
-%   pixel-based VIF                 'VIFP'
-%   universal quality index         'UQI'
-%   image fidelity criterion        'IFC'
-%   noise quality measure           'NQM'
-%   weighted signal-to-noise ratio  'WSNR'
-%   signal-to-noise ratio           'SNR'
+
     %% Check image size
     if find(size(img) == 0)
         error('At least one dimention of the input image is zero.');
@@ -41,7 +27,7 @@ function [metric] = iqm(name, img, varargin)
         F = iqm_function_handles(name);
     catch ME
         if strcmp(ME.identifier, 'MATLAB:Containers:Map:NoKey')
-            error('Metric ''%s'' does not exist.\nSupported metrics:\n%s', join(keys(iqm_function_handles)));
+            error('Metric ''%s'' does not exist.\nSupported metrics:\n%s', name, string(join(keys(iqm_function_handles))));
         else
             rethrow(ME);
         end

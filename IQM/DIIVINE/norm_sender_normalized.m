@@ -1,6 +1,3 @@
-
-
-
 % try to fix the range of z field
 function [subband size_band] = norm_sender_normalized(pyro,pind,Nsc,Nor,parent,neighbor,blSzX,blSzY,nbins)
 guardband = 16;
@@ -22,7 +19,7 @@ for scale=1:Nsc
         prnt = parent & (nband < Nband-Nor);   % has the subband a parent?
         BL = zeros(size(aux,1),size(aux,2),1 + prnt);
         BL(:,:,1) = aux;
-        if prnt,
+        if prnt
             auxp = pyrBand(pyro, pind, nband+Nor);
             %    if nband>Nor+1,     % resample 2x2 the parent if not in the high-pass oriented subbands.
             % 	   auxp = real(imenlarge2(auxp)); % this was uncommented
@@ -32,7 +29,7 @@ for scale=1:Nsc
             BL(:,:,2) = auxp(1:Nsy,1:Nsx);
         end
         y=BL;
-        [nv,nh,nb] = size(y);
+        [nv, nh, nb] = size(y);
         block = [blSzX blSzY];
 
         nblv = nv-block(1)+1;	% Discard the outer coefficients
@@ -42,14 +39,14 @@ for scale=1:Nsc
 
         Ly = (block(1)-1)/2;		% block(1) and block(2) must be odd!
         Lx = (block(2)-1)/2;
-        if (Ly~=floor(Ly))|(Lx~=floor(Lx)),
+        if Ly ~= floor(Ly) || Lx ~= floor(Lx)
             error('Spatial dimensions of neighborhood must be odd!');
         end
         Y = zeros(nexp,N);		% It will be the observed signal (rearranged in nexp neighborhoods)
         % Rearrange observed samples in 'nexp' neighborhoods
         n = 0;
-        for ny=-Ly:Ly,	% spatial neighbors
-            for nx=-Lx:Lx,
+        for ny=-Ly:Ly	% spatial neighbors
+            for nx=-Lx:Lx
                 n = n + 1;
                 foo = shift(y(:,:,1),[ny nx]);
                 foo = foo(Ly+1:Ly+nblv,Lx+1:Lx+nblh);
@@ -57,15 +54,15 @@ for scale=1:Nsc
             end
         end
 
-        if prnt,	% parent
+        if prnt	% parent
             n = n + 1;
             foo = y(:,:,2);
             foo = foo(Ly+1:Ly+nblv,Lx+1:Lx+nblh);
             Y(:,n) = (foo(:));
         end
 
-        %      including neighbor
-        if neighbor,
+        % including neighbor
+        if neighbor
             for neib=1:Nor
                 if neib == orien
                     continue;
@@ -88,8 +85,8 @@ for scale=1:Nsc
         o_c = aux(Ly+1:Ly+nblv,Lx+1:Lx+nblh);
         o_c = (o_c(:));
         o_c = o_c - mean(o_c);
-        [hy rangeo] = hist(o_c,nbins);
-        hy=hy/sum(hy);
+        [hy, rangeo] = hist(o_c,nbins);
+        hy = hy/sum(hy);
 
         tempY = (Y*pinv(C_x)).*Y/N;
         z = sqrt(sum(tempY,2));
@@ -100,7 +97,10 @@ for scale=1:Nsc
 
         % consider the guardband
 
-        g_c=reshape(g_c,nblv,nblh);
+        % FIXME Neither actually work. But what's the real intention here?
+        g_c=reshape(g_c, nblv, nblh); % complains about numel changing
+        % g_c=imresize(g_c, [nblv, nblh]) % complains about empty input
+
         gb = guardband/(2^(scale-1));
         g_c=g_c(gb+1:end-gb, gb+1:end-gb);
                 size_band(p,:) = size(g_c);

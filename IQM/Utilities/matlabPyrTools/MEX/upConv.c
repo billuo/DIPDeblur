@@ -28,24 +28,24 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   int y_start = 1;
   int y_step = 1;
   int x_stop, y_stop;
-  mxArray *arg;
+  const mxArray *arg0,*arg1,*arg3,*arg4,*arg6;
   double *mxMat;
   char edges[15] = "reflect1";
 
   if (nrhs<2) mexErrMsgTxt("requres at least 2 args.");
 
   /* ARG 1: IMAGE  */
-  arg = prhs[0];
-  if notDblMtx(arg) mexErrMsgTxt("IMAGE arg must be a non-sparse double float matrix.");
-  image = mxGetPr(arg);
-  x_idim = (int) mxGetM(arg); /* X is inner index! */
-  y_idim = (int) mxGetN(arg);
+  arg0 = prhs[0];
+  if notDblMtx(arg0) mexErrMsgTxt("IMAGE arg must be a non-sparse double float matrix.");
+  image = mxGetPr(arg0);
+  x_idim = (int) mxGetM(arg0); /* X is inner index! */
+  y_idim = (int) mxGetN(arg0);
 
   /* ARG 2: FILTER */
-  arg = prhs[1];
-  if notDblMtx(arg) mexErrMsgTxt("FILTER arg must be non-sparse double float matrix.");  filt = mxGetPr(arg);
-  x_fdim = (int) mxGetM(arg); 
-  y_fdim = (int) mxGetN(arg);
+  arg1 = prhs[1];
+  if notDblMtx(arg1) mexErrMsgTxt("FILTER arg must be non-sparse double float matrix.");  filt = mxGetPr(arg1);
+  x_fdim = (int) mxGetM(arg1); 
+  y_fdim = (int) mxGetN(arg1);
 
   /* ARG 3 (optional): EDGES */
   if (nrhs>2) 
@@ -58,11 +58,11 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   /* ARG 4 (optional): STEP */
   if (nrhs>3)
       {
-      arg = prhs[3];
-      if notDblMtx(arg) mexErrMsgTxt("STEP arg must be double float matrix.");
-      if (mxGetM(arg) * mxGetN(arg) != 2)
+      arg3 = prhs[3];
+      if notDblMtx(arg3) mexErrMsgTxt("STEP arg must be double float matrix.");
+      if (mxGetM(arg3) * mxGetN(arg3) != 2)
     	 mexErrMsgTxt("STEP arg must contain two elements.");
-      mxMat = mxGetPr(arg);
+      mxMat = mxGetPr(arg3);
       x_step = (int) mxMat[0];
       y_step = (int) mxMat[1];
       if ((x_step<1) || (y_step<1))
@@ -72,11 +72,11 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   /* ARG 5 (optional): START */
   if (nrhs>4)
       {
-      arg = prhs[4];
-      if notDblMtx(arg) mexErrMsgTxt("START arg must be double float matrix.");
-      if (mxGetM(arg) * mxGetN(arg) != 2)
+      arg4 = prhs[4];
+      if notDblMtx(arg4) mexErrMsgTxt("START arg must be double float matrix.");
+      if (mxGetM(arg4) * mxGetN(arg4) != 2)
 	mexErrMsgTxt("START arg must contain two elements.");
-      mxMat = mxGetPr(arg);
+      mxMat = mxGetPr(arg4);
       x_start = (int) mxMat[0];
       y_start = (int) mxMat[1];
       if ((x_start<1) || (y_start<1))
@@ -106,15 +106,15 @@ void mexFunction(int nlhs,	     /* Num return vals on lhs */
   /* ARG 6 (optional): RESULT image */
   if (nrhs>6)
       {
-      arg = prhs[6];
-      if notDblMtx(arg) mexErrMsgTxt("RES arg must be double float matrix.");
+      arg6 = prhs[6];
+      if notDblMtx(arg6) mexErrMsgTxt("RES arg must be double float matrix.");
 
       /* 7/10/97: Returning one of the args causes problems with Matlab's memory 
 	 manager, so we don't return anything if the result image is passed */
       /*  plhs[0] = arg;  */
-      result = mxGetPr(arg);
-      x_rdim =  (int) mxGetM(arg); /* X is inner index! */
-      y_rdim = (int) mxGetN(arg);
+      result = mxGetPr(arg6);
+      x_rdim =  (int) mxGetM(arg6); /* X is inner index! */
+      y_rdim = (int) mxGetN(arg6);
       if  ((x_stop>x_rdim) || (y_stop>y_rdim))
 	mexErrMsgTxt("STOP values must within image dimensions.");
       }

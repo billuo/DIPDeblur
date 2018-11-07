@@ -25,4 +25,43 @@ end
 
 %------------------------------------------------------------
 
-res = upBlur(blurDn(im,nlevs,filt));
+if isstr(filt)
+  filt = namedFilter(filt);
+end  
+
+filt = filt/sum(filt(:));
+
+if nlevs > 0
+  if (any(size(im)==1))
+    if (~any(size(filt)==1))
+      error('Cant  apply 2D filter to 1D signal');
+    end
+    if (size(im,2)==1)
+      filt = filt(:);
+    else
+      filt = filt(:)';
+    end
+    
+    in = corrDn(im,filt,'reflect1',(size(im)~=1)+1);
+    out = blur(in, nlevs-1, filt);
+    res = upConv(out, filt, 'reflect1', (size(im)~=1)+1, [1 1], size(im));
+
+  elseif (any(size(filt)==1))
+    filt = filt(:);
+
+    in = corrDn(im,filt,'reflect1',[2 1]);
+    in = corrDn(in,filt','reflect1',[1 2]);
+    out = blur(in, nlevs-1, filt);
+    res = upConv(out, filt', 'reflect1', [1 2], [1 1], [size(out,1),size(im,2)]);
+    res = upConv(res, filt, 'reflect1', [2 1], [1 1], size(im));
+
+  else
+
+    in = corrDn(im,filt,'reflect1',[2 2]);
+    out = blur(in, nlevs-1, filt);
+    res = upConv(out, filt, 'reflect1', [2 2], [1 1], size(im));
+  end
+else
+  res = im;
+end
+

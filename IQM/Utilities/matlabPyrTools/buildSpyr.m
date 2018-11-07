@@ -1,6 +1,7 @@
 % [PYR, INDICES, STEERMTX, HARMONICS] = buildSpyr(IM, HEIGHT, FILTFILE, EDGES)
 %
-% Construct a steerable pyramid on matrix IM.
+% Construct a steerable pyramid on matrix IM.  Convolutions are
+% done with spatial filters.
 %
 % HEIGHT (optional) specifies the number of pyramid levels to build. Default
 % is maxPyrHt(size(IM),size(FILT)). 

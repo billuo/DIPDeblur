@@ -1,7 +1,6 @@
 function q = divine(im)
 % DIIVINE Software release.
 % 
-% 
 % ========================================================================
 % 
 % -----------COPYRIGHT NOTICE STARTS WITH THIS LINE------------
@@ -85,7 +84,7 @@ function q = divine(im)
 % Note on training: 
 % This release version of BIQI was trained on the entire LIVE database.
 % 
-% 
-
-f = divine_feature_extract(im);
-q = divine_overall_quality(f);
+ 
+    f = divine_feature_extract(im);
+    q = divine_overall_quality(f);
+end

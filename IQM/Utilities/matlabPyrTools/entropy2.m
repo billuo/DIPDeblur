@@ -4,8 +4,8 @@
 % first discretized.  Optional argument BINSIZE controls the
 % discretization, and defaults to 256/(max(VEC)-min(VEC)).
 %
-% NOTE: This is a heavily  biased estimate of entropy when you
-% don't have much data.
+% NOTE: This is a heavily biased estimate of entropy (it is too
+% small) when you don't have much data!
 
 % Eero Simoncelli, 6/96.
 

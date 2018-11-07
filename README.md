@@ -11,6 +11,8 @@ For group project of Digital Image Processing on blind image deblurring.
 
 Supports easy image quality evaluation with 16+ flavours, namely:
 1. Full-reference metrics
+    * MSE
+    * SNR
     * PSNR
     * WSNR
     * SSIM

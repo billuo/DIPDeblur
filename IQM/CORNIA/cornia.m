@@ -48,7 +48,7 @@ function score = cornia(img, D, encoder, svm_model, svm_scale, M, P, numPatch)
             fv = llc_encoding_func(D, patches);
     end
     fv = fv'.*svm_scale(:,1)+svm_scale(:,2);
-    score = svmpredict(1, fv(:)', svm_model, '-b 1');
+    [~, score] = evalc('svmpredict(1, fv(:)'', svm_model)'); %% evalc to suppress console output
 end
 
 function sc_fv = sc_encoding_func(D, fv, lambda)

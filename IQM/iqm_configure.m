@@ -10,6 +10,7 @@ function iqm_configure()
     addpath(iqm_path);
     savepath(); % only save the path to this file
     addpath(genpath(fullfile(iqm_path, 'Utilities')));
+    rmpath(fullfile(iqm_path, 'Utilities', 'libsvm'));
     %% Compile SVM if necessary
     disp('Compiling LibSVM...');
     %%% SVM binaries to be used by some of the no-reference metrics.
@@ -18,7 +19,7 @@ function iqm_configure()
     % global iqm_svm_train; % No training currently
     % .mex*64 will be automatically found since we added them to search path
     if ~ispc
-        old_cd = cd(fullfile(iqm_path, 'Utilities', 'libsvm'));
+        old_cd = cd(fullfile(iqm_path, 'Utilities', 'libsvm-3.1'));
         [status, output] = system('make');
         if status ~= 0
             error(output);
@@ -30,11 +31,11 @@ function iqm_configure()
         cd(old_cd);
     else
         % svm-*.exe in Utilities/libsvm/windows/
-        iqm_svm_scale = fullfile(iqm_path, 'Utilities', 'libsvm', 'windows', 'svm-scale.exe');
-        iqm_svm_predict = fullfile(iqm_path, 'Utilities', 'libsvm', 'windows', 'svm-predict.exe');
+        iqm_svm_scale = fullfile(iqm_path, 'Utilities', 'libsvm-3.1', 'windows', 'svm-scale.exe');
+        iqm_svm_predict = fullfile(iqm_path, 'Utilities', 'libsvm-3.1', 'windows', 'svm-predict.exe');
     end
     %% Compile PyrTools
-    disp('Compiling PytTools...');
+    disp('Compiling PyrTools...');
     old_cd = cd(fullfile(iqm_path, 'Utilities', 'matlabPyrTools', 'MEX'));
     compilePyrTools();
     cd(old_cd);

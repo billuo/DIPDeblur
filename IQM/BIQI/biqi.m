@@ -132,8 +132,8 @@ function [quality probs] = biqi(im)
     global iqm_svm_scale;
     global iqm_svm_predict;
 
-    system([iqm_svm_scale ' -r range2 test_ind > test_ind_scaled']);
-    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89 output_89']);
+    [~, ~] = system([iqm_svm_scale ' -r range2 test_ind > test_ind_scaled']);
+    [~, ~] = system([iqm_svm_predict ' -b 1 test_ind_scaled model_89 output_89']);
     delete test_ind
 
     %% Quality along each dimension
@@ -151,8 +151,8 @@ function [quality probs] = biqi(im)
     fclose(fid);
 
     % Jp2k quality
-    system([iqm_svm_scale ' -r range2_jp2k test_ind > test_ind_scaled']);
-    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_jp2k output_blur']);
+    [~, ~] = system([iqm_svm_scale ' -r range2_jp2k test_ind > test_ind_scaled']);
+    [~, ~] = system([iqm_svm_predict ' -b 1 test_ind_scaled model_89_jp2k output_blur']);
     load output_blur
     jp2k_score = output_blur;
     delete output_blur
@@ -162,23 +162,23 @@ function [quality probs] = biqi(im)
 
 
     % WN quality
-    system([iqm_svm_scale ' -r range2_wn test_ind > test_ind_scaled']);
-    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_wn output_blur']);
+    [~, ~] = system([iqm_svm_scale ' -r range2_wn test_ind > test_ind_scaled']);
+    [~, ~] = system([iqm_svm_predict ' -b 1 test_ind_scaled model_89_wn output_blur']);
     load output_blur
     wn_score = output_blur;
     delete output_blur
 
 
     % Blur quality
-    system([iqm_svm_scale ' -r range2_blur test_ind > test_ind_scaled']);
-    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_blur output_blur']);
+    [~, ~] = system([iqm_svm_scale ' -r range2_blur test_ind > test_ind_scaled']);
+    [~, ~] = system([iqm_svm_predict ' -b 1 test_ind_scaled model_89_blur output_blur']);
     load output_blur
     blur_score = output_blur;
     delete output_blur
 
     % FF quality
-    system([iqm_svm_scale ' -r range2_ff test_ind > test_ind_scaled']);
-    system([iqm_svm_predict ' -q -b 1 test_ind_scaled model_89_ff output_blur']);
+    [~, ~] = system([iqm_svm_scale ' -r range2_ff test_ind > test_ind_scaled']);
+    [~, ~] = system([iqm_svm_predict ' -b 1 test_ind_scaled model_89_ff output_blur']);
     load output_blur
     ff_score = output_blur;
 

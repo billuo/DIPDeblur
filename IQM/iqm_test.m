@@ -16,7 +16,6 @@ function iqm_test()
     fprintf('\t Success!\n')
     %% Metric test
     disp('Testing metrics...');
-    n_errors = 0;
     %% Read test images
     img = imread('blurred.png');
     img_ref = imread('deblurred.png');
@@ -26,6 +25,7 @@ function iqm_test()
     disp('Iterating through all metrics...');
     %% Iteration
     global iqm_function_handles;
+    error_msgs = {};
     counter = 0;
     for name_cell = keys(iqm_function_handles)
         counter = counter + 1;
@@ -37,16 +37,17 @@ function iqm_test()
             assert(~isempty(result), 'No value returned.');
             fprintf('Result: %8.2f  Success!\n', result);
         catch ME
-            warning('on');
-            warning('%s\n\t%s FAILED\n', getReport(ME), name);
-            n_errors = n_errors + 1;
+            error_msgs{end + 1} = sprintf('%s\n\t%s FAILED\n', getReport(ME), name);
         end
     end
     %% Conclude
     disp('NOTE: Even succeeded ones may have computed a wrong value. Further checking needed!');
-    if n_errors == 0
+    if isempty(error_msgs)
         fprintf('\tALL PASSED!\n');
     else
-        error('Number of error: %i\n', n_errors);
+        fprintf('Number of error: %i\n', size(error_msgs, 1));
+        for error_msg = error_msgs
+            disp(error_msg{1});
+        end
     end
 end

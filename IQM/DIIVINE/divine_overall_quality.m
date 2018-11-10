@@ -4,14 +4,14 @@ function score = divine_overall_quality(r)
     %% Classification
     atrain = repmat(a_class,[size(r,1) 1]);btrain = repmat(b_class,[size(r,1) 1]);
     x_curr = atrain .* r + btrain;
-    [pred_class, acc, p] = svmpredict(1, x_curr, model_class, '-b 1');
+    [~, ~, ~, p] = evalc('svmpredict(1, x_curr, model_class, ''-b 1'');'); % evalc to suppress console output
     %% Regression
-    q = zeros(5, 1);
+    q = zeros(1, 5);
     for i = 1:5
         atrain = repmat(a_reg(i,:), [size(r,1) 1]);
         btrain = repmat(b_reg(i,:), [size(r,1) 1]);
         x_curr = atrain .* r + btrain;
-        [q(i), reg_acc(i,:)] = svmpredict(1, x_curr, model_reg{i}, '-b 1');
+        [~, q(i), reg_acc(i,:)] = evalc('svmpredict(1, x_curr, model_reg{i})'); % evalc to suppress console output
     end
     %% Final Score
     score = sum(p .* q);

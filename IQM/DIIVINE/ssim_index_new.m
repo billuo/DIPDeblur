@@ -78,7 +78,7 @@ sigma1_sq = filter2(wind, img1.*img1, 'valid') - mu1_sq;
 sigma2_sq = filter2(wind, img2.*img2, 'valid') - mu2_sq;
 sigma12 = filter2(wind, img1.*img2, 'valid') - mu1_mu2;
 
-if (C1 > 0 & C2 > 0)
+if C1 > 0 && C2 > 0
    ssim_map = ((2*mu1_mu2 + C1).*(2*sigma12 + C2))./((mu1_sq + mu2_sq + C1).*(sigma1_sq + sigma2_sq + C2));
    cs_map = (2*sigma12 + C2)./(sigma1_sq + sigma2_sq + C2);
 else

@@ -15,7 +15,7 @@ function metrics = iqm_all(img, img_ref)
         fprintf('Evaluating metric %s\n', names{i});
         [t, metrics(i)] = iqm_time(names{i}, img, img_ref);
         time_usage = time_usage + t;
-        fprintf('Finished after %f seconds\n', t);
+        fprintf('\tFinished after %f seconds\n', t);
     end
     fprintf('Total time usage: %f seconds\n', time_usage);
 end

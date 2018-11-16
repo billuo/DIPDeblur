@@ -1,6 +1,6 @@
 function iqm_configure()
 % IQM_CONFIGURE Configure Matlab search path and load various function handles.
-% Need to be called every time Matlab starts up (for now).
+%   Need to be called every time Matlab starts up (for now).
     %% Add current folder to Matlab search path
     disp('Adding search path...');
     global iqm_path;
@@ -140,7 +140,9 @@ function [BLIINDS2] = iqm_bliinds2(img)
     global iqm_path;
     module_name = 'BLIINDS2';
     addpath(genpath(fullfile(iqm_path, module_name)));
+    tic;
     features = bliinds2_feature_extraction(img);
+    toc;
     BLIINDS2 = bliinds_prediction(features(:)');
     rmpath(genpath(fullfile(iqm_path, module_name)));
 end

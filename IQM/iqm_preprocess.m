@@ -1,25 +1,26 @@
-function processed_image = iqm_preprocess(metric_name, input_image)
+function preprocessed_image = iqm_preprocess(metric_name, input_image)
 % IQM_PREPROCESS Preprocess an image for a specific metric, return the processed image.
-%
-% It loads the image if given only the file name and then cast it to double
-% if necessary. Then for metrics other than MSE and PSNR, image of format
-% with more than 1 channel is converted to gray scale image. Eventually
-% image is padded to reasonable size if necessary.
-    image = zeros(size(input_image), class(input_image)); % clone one!
-    image(:) = input_image(:);
+%   Invariant after preprocessing:
+%   Image will be an array of double. (Even if given only an image file name)
+%   Image will be padded in height and width as needed.
+%   Image depth is converted to 1 (gray scale) if needed.
     %% Load image if it's a file name rather than a Matlab image
-    if ischar(image)
+    if ischar(input_image) || isstring(input_image)
         try
-            image = imread(image);
+            image = imread(input_image);
         catch ME
             if strcmp(ME.identifier, 'MATLAB:imagesci:imread:fileDoesNotExist')
-                error('''%s'' is neither a Matlab image or the name of an existing image file.', image);
+                error('''%s'' is neither a Matlab image or the name of an existing image file.', input_image);
             else
                 rethrow(ME);
             end
         end
+    else
+        % Don't modify the original image: clone one
+        image = zeros(size(input_image), class(input_image));
+        image(:) = input_image(:);
     end
-    %% Cast to double
+    %% Cast to double if not already
     if ~isa(image, 'double')
         image = im2double(image); % im2double automatically rescale to [0, 1]
     end
@@ -27,7 +28,6 @@ function processed_image = iqm_preprocess(metric_name, input_image)
     [H, W, D] = size(image);
     if not(multichannel(metric_name)) && (D ~= 1)
         if D == 3
-            % fprintf('DEBUG: %s demands gray-scale image input.\n', metric_name);
             image = rgb2gray(image); % Assume it to be sRGB.
         else
             error('Color space of the input image could not be converted. (Depth = %d)', D);
@@ -36,11 +36,10 @@ function processed_image = iqm_preprocess(metric_name, input_image)
     %% Add padding if necessary
     if  need_padding(metric_name)
         %% Calculate new height and width
-        switch string(metric_name)
-            case "NIQE"
-                padding_size = 96;
-            otherwise
-                padding_size = 32;
+        if string(metric_name) == "NIQE"
+            padding_size = 96;
+        else
+            padding_size = 32;
         end
         H_minimum = 128;
         W_minimum = 128;
@@ -68,15 +67,15 @@ function processed_image = iqm_preprocess(metric_name, input_image)
             image = padded_image;
         end
     end
-    processed_image = image;
+    preprocessed_image = image;
 end
 
 function yes = multichannel(metric_name)
 % Return 0 if metric_name can only process monocolor image, 1 otherwise.
-    yes = ~isempty(find(string(metric_name) == ["MSE", "SNR", "PSNR", "MDQE"], 1));
+    yes = any(string(metric_name) == ["MSE", "SNR", "PSNR", "MDQE"]);
 end
 
 function yes = need_padding(metric_name)
 % Return 1 if metric_name must operate on image of specific size, 0 otherwise.
-    yes = ~isempty(find(string(metric_name) == ["VIF", "IFC", "VSNR"], 1));
+    yes = any(string(metric_name) == ["VIF", "IFC", "VSNR"]);
 end

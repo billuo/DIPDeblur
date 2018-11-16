@@ -1,10 +1,10 @@
 function gamma_gauss = gama_dct(I)
-    img = dct2(I.data);
-    img = img(2:end)';
+    block = dct2(I.data);
+    block = block(2:end)';
 
-    mean_gauss = mean(img);
-    var_gauss = var(img);
-    mean_abs = mean(abs(img - mean_gauss))^2;
+    mean_gauss = mean(block);
+    var_gauss = var(block);
+    mean_abs = mean(abs(block - mean_gauss))^2;
     rho = var_gauss / (mean_abs+0.0000001);
 
     g = 0.03:0.001:10;

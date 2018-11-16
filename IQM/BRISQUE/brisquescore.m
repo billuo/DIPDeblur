@@ -4,7 +4,9 @@ function qualityscore  = brisquescore(img)
     assert(isa(img, 'double'));
     %% Compute
     old_cd = cd(fileparts(which(mfilename)));
-    delete output test test.scaled dump
+    if exist('output', 'file')
+        delete output
+    end
     %%% Prepare input for LibSVM
     feat = brisque_feature(img);
     fid = fopen('test', 'w');

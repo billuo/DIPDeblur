@@ -1,7 +1,8 @@
 function gamma_gauss = gama_dct(I)
-    img = I.data(2:end)';
-    gamma_gauss = gama_gen_gauss(img);
-    return
+    img = dct2(I.data);
+    img = img(2:end)';
+    %gamma_gauss = gama_gen_gauss(img);
+    %return
     mean_gauss = mean(img);
     var_gauss = var(img);
     mean_abs = mean(abs(img - mean_gauss))^2;

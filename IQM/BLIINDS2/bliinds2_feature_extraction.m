@@ -2,25 +2,12 @@ function features = bliinds2_feature_extraction(Img)
     h=fspecial('gaussian',3);
 
     %Img = double(I(:,:,1));
-    tic;
     coeff_freq_var_L1 = blkproc(Img,[3,3],[1,1],@rho_dct);
-    toc;
-    tic;
-    %gama_L1 = blkproc(Img,[3,3],[1,1],@gama_dct);
-    gama_L1 = blockproc(Img,[3,3],@gama_dct, 'BorderSize', [1,1], 'TrimBorder', false);
-    toc;
-    tic;
+    gama_L1 = blockproc(Img, [3,3], @gama_dct, 'BorderSize', [1,1], 'TrimBorder', false, 'UseParallel', true);
     ori1_rho_L1 = blkproc(Img,[3 3],[1,1],@oriented1_dct_rho_config3);
-    toc;
-    tic;
     ori2_rho_L1 = blkproc(Img,[3 3],[1,1],@oriented2_dct_rho_config3);
-    toc;
-    tic;
     ori3_rho_L1 = blkproc(Img,[3 3],[1,1],@oriented3_dct_rho_config3);
-    toc;
-    tic;
     subband_energy_L1 = blkproc(Img,[3 3],[1,1],@dct_freq_bands);
-    toc;
 
     rho_sorted_temp = sort(coeff_freq_var_L1(:),'descend');
     rho_count = length(rho_sorted_temp);
@@ -67,8 +54,7 @@ function features = bliinds2_feature_extraction(Img)
     Img2 = Img1_filtered(2:2:end,2:2:end);
 
     coeff_freq_var_L2 = blkproc(Img2,[3,3],[1,1],@rho_dct);
-    %gama_L2 = blkproc(Img2,[3,3],[1,1],@gama_dct);
-    gama_L2 = blockproc(Img2,[3,3],@gama_dct,'BorderSize',[1,1], 'TrimBorder', false);
+    gama_L2 = blockproc(Img2,[3,3],@gama_dct,'BorderSize',[1,1], 'TrimBorder', false, 'UseParallel', true);
     ori1_rho_L2 = blkproc(Img2,[3 3],[1,1],@oriented1_dct_rho_config3);
     ori2_rho_L2 = blkproc(Img2,[3 3],[1,1],@oriented2_dct_rho_config3);
     ori3_rho_L2 = blkproc(Img2,[3 3],[1,1],@oriented3_dct_rho_config3);
@@ -115,8 +101,7 @@ function features = bliinds2_feature_extraction(Img)
     Img3 = Img2_filtered(2:2:end,2:2:end);
 
     coeff_freq_var_L3 = blkproc(Img3,[3,3],[1,1],@rho_dct);
-    %gama_L3 = blkproc(Img3,[3,3],[1,1],@gama_dct);
-    gama_L3 = blockproc(Img3,[3,3],@gama_dct,'BorderSize',[1,1], 'TrimBorder', false);
+    gama_L3 = blockproc(Img3,[3,3],@gama_dct,'BorderSize',[1,1], 'TrimBorder', false, 'UseParallel', true);
     ori1_rho_L3 = blkproc(Img3,[3 3],[1,1],@oriented1_dct_rho_config3);
     ori2_rho_L3 = blkproc(Img3,[3 3],[1,1],@oriented2_dct_rho_config3);
     ori3_rho_L3 = blkproc(Img3,[3 3],[1,1],@oriented3_dct_rho_config3);

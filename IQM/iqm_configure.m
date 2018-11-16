@@ -140,9 +140,7 @@ function [BLIINDS2] = iqm_bliinds2(img)
     global iqm_path;
     module_name = 'BLIINDS2';
     addpath(genpath(fullfile(iqm_path, module_name)));
-    tic;
     features = bliinds2_feature_extraction(img);
-    toc;
     BLIINDS2 = bliinds_prediction(features(:)');
     rmpath(genpath(fullfile(iqm_path, module_name)));
 end

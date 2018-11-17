@@ -18,25 +18,22 @@ function features = bliinds2_feature_extraction(Img)
     rho_count = length(rho_sorted_temp);
     percentile10_coeff_freq_var_L1=mean(rho_sorted_temp(1:ceil(rho_count/10)));
     percentile100_coeff_freq_var_L1=mean(rho_sorted_temp(:));
-    %clear rho_sorted_temp rho_count
     
     gama_sorted_temp = sort(gama_L1(:),'ascend');
     gama_count = length(gama_sorted_temp);
     percentile10_gama_L1=mean(gama_sorted_temp(1:ceil(gama_count/10)));
     percentile100_gama_L1=mean(gama_sorted_temp(:));
-    %clear gama_sorted_temp gama_count
     
     subband_energy_sorted_temp = sort(subband_energy_L1(:),'descend');
     subband_energy_count = length(subband_energy_sorted_temp);
     percentile10_subband_energy_L1=mean(subband_energy_sorted_temp(1:ceil(subband_energy_count/10)));
     percentile100_subband_energy_L1=mean(subband_energy_sorted_temp(:));
-
+    
     ori_rho_L1 = reshape(var(ori123_rho_L1, 0, 3), size(ori123_rho_L1(:, :, 1)));
     ori_sorted_temp = sort(ori_rho_L1(:),'descend');
     ori_count = length(ori_sorted_temp);
     percentile10_orientation_L1=mean(ori_sorted_temp(1:ceil(ori_count/10)));
     percentile100_orientation_L1=mean(ori_sorted_temp(:));
-    %clear var_ori_sorted_temp rho_count
     
     features_L1 = [percentile100_coeff_freq_var_L1;percentile10_coeff_freq_var_L1;percentile100_gama_L1;percentile10_gama_L1;percentile100_subband_energy_L1;percentile10_subband_energy_L1;percentile100_orientation_L1;percentile10_orientation_L1];
     
@@ -54,13 +51,11 @@ function features = bliinds2_feature_extraction(Img)
     rho_count = length(rho_sorted_temp);
     percentile10_coeff_freq_var_L2=mean(rho_sorted_temp(1:ceil(rho_count/10)));
     percentile100_coeff_freq_var_L2=mean(rho_sorted_temp(:));
-    %clear rho_sorted_temp rho_count
     
     gama_sorted_temp = sort(gama_L2(:),'ascend');
     gama_count = length(gama_sorted_temp);
     percentile10_gama_L2=mean(gama_sorted_temp(1:ceil(gama_count/10)));
     percentile100_gama_L2=mean(gama_sorted_temp(:));
-    %clear gama_sorted_temp gama_count
     
     subband_energy_sorted_temp = sort(subband_energy_L2(:),'descend');
     subband_energy_count = length(subband_energy_sorted_temp);
@@ -72,10 +67,8 @@ function features = bliinds2_feature_extraction(Img)
     ori_count = length(ori_sorted_temp);
     percentile10_orientation_L2=mean(ori_sorted_temp(1:ceil(ori_count/10)));
     percentile100_orientation_L2=mean(ori_sorted_temp(:));
-    %clear var_ori_sorted_temp rho_count
     
     features_L2 = [percentile100_coeff_freq_var_L2;percentile10_coeff_freq_var_L2;percentile100_gama_L2;percentile10_gama_L2;percentile100_subband_energy_L2;percentile10_subband_energy_L2;percentile100_orientation_L2;percentile10_orientation_L2];
-    
     %%
     Img2_filtered=double(imfilter(Img2,h));
     Img3 = Img2_filtered(2:2:end,2:2:end);
@@ -90,13 +83,11 @@ function features = bliinds2_feature_extraction(Img)
     rho_count = length(rho_sorted_temp);
     percentile10_coeff_freq_var_L3=mean(rho_sorted_temp(1:ceil(rho_count/10)));
     percentile100_coeff_freq_var_L3=mean(rho_sorted_temp(:));
-    %clear rho_sorted_temp rho_count
     
     gama_sorted_temp = sort(gama_L3(:),'ascend');
     gama_count = length(gama_sorted_temp);
     percentile10_gama_L3=mean(gama_sorted_temp(1:ceil(gama_count/10)));
     percentile100_gama_L3=mean(gama_sorted_temp(:));
-    %clear gama_sorted_temp gama_count
     
     subband_energy_sorted_temp = sort(subband_energy_L3(:),'descend');
     subband_energy_count = length(subband_energy_sorted_temp);
@@ -108,10 +99,8 @@ function features = bliinds2_feature_extraction(Img)
     ori_count = length(ori_sorted_temp);
     percentile10_orientation_L3=mean(ori_sorted_temp(1:ceil(ori_count/10)));
     percentile100_orientation_L3=mean(ori_sorted_temp(:));
-    %clear var_ori_sorted_temp rho_count
     
     features_L3 = [percentile100_coeff_freq_var_L3;percentile10_coeff_freq_var_L3;percentile100_gama_L3;percentile10_gama_L3;percentile100_subband_energy_L3;percentile10_subband_energy_L3;percentile100_orientation_L3;percentile10_orientation_L3];
-    
     %%
     features = [features_L1 features_L2 features_L3];
 end

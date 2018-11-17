@@ -1,6 +1,6 @@
 function iqm_configure()
-% IQM_CONFIGURE Configure Matlab search path and load various function handles.
-%   Need to be called every time Matlab starts up (for now).
+    % IQM_CONFIGURE Configure Matlab search path and load various function handles.
+    %   Need to be called every time Matlab starts up (for now).
     %% Add current folder to Matlab search path
     disp('Adding search path...');
     global iqm_path;

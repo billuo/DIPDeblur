@@ -1,6 +1,12 @@
-function iqm_configure()
+function iqm_configure(varargin)
     % IQM_CONFIGURE Configure Matlab search path and load various function handles.
     %   Need to be called every time Matlab starts up (for now).
+    %% Parse arguments
+    if nargin ~= 0
+        do_test = logical(varargin{1});
+    else
+        do_test = false;
+    end
     %% Add current folder to Matlab search path
     disp('Adding search path...');
     global iqm_path;
@@ -49,7 +55,9 @@ function iqm_configure()
         iqm_function_handles(char(name)) = eval(['@iqm_', lower(char(name))]);
     end
     %%% Test them
-    iqm_test();
+    if do_test
+        iqm_test();
+    end
 end
 
 %% Metric bindings

@@ -37,6 +37,9 @@ The .m prefixed with iqm in the same directory as this README.txt is the only in
 Thus some precompiled .mex are present in directory './SSEQ'.
 For now, the extra libsvm is of version 3.27.*
 
+**Due to size limit, A necessary file `CORNIA/LIVE_soft_svm_model.mat` is ignored in repository. You can download it here:**  
+* *https://pan.baidu.com/s/1oReFYJ-vd7QbT-IVRPUf2g*
+
 ## Usage
 * Everytime before use you need to run 'iqm\_configure.m'.
     * After configurating it automatically runs a simple test, if its first argument is logical true.
@@ -60,5 +63,3 @@ Example:
 >>iqm_all('blurred.png', 'deblurred.png')       % Evaluates every metrics, return them in an array.
 ```
 
-**Due to size limit, CORNIA/LIVE_soft_svm_model.mat is ignored in repository.
-It should be later uploaded elsewhere for downloading.**

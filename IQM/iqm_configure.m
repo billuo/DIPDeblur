@@ -54,6 +54,8 @@ function iqm_configure(varargin)
     for name = names
         iqm_function_handles(char(name)) = eval(['@iqm_', lower(char(name))]);
     end
+    %% Starting parpool
+    parpool(maxNumCompThreads);
     %%% Test them
     if do_test
         iqm_test();

@@ -9,15 +9,19 @@ function gamma_gauss = gama_dct(I)
 
     g = 0.03:0.001:10;
     r = gamma(1./g).*gamma(3./g)./(gamma(2./g).^2);
-    %% corner cases
-    if rho > r(1) || r(end) >= rho
-        gamma_gauss = 11;
-        return
-    end
-    for i = 1:numel(g)-1
-        if r(i) >= rho && rho > r(i+1)
-            gamma_gauss = g(i);
-            break
-        end
-    end
+    %% interp1 to round
+    gamma_gauss = interp1([r, realmax], [g(1:end-1), 11, 11], rho, 'next', 'extrap');
+    %% linear search to round
+    % corner cases
+%     if rho > r(1) || r(end) >= rho
+%         gamma_gauss = 11;
+%     else
+%         for i = 1:numel(g)-1
+%             if r(i) >= rho && rho > r(i+1)
+%                 gamma_gauss = g(i);
+%                 break
+%             end
+%         end
+%     end
+%     assert(my_result == gamma_gauss, '%f ~= %f', my_result, gamma_gauss);
 end

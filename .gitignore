@@ -24,3 +24,13 @@ IQM/Utilities/libsvm-3\.1/matlab/svmpredict\.mexa64
 IQM/Utilities/libsvm-3\.1/matlab/svmtrain\.mexa64
 
 *.o
+
+IQM/BIQI/test_ind_scaled
+
+IQM/BRISQUE/dump
+
+IQM/BRISQUE/output
+
+IQM/BRISQUE/test
+
+IQM/BRISQUE/test\.scaled

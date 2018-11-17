@@ -41,6 +41,8 @@ For now, the extra libsvm is of version 3.27.*
 * Everytime before use you need to run 'iqm\_configure.m'.
     * After configurating it automatically runs a simple test.
 * Once properly setup, call iqm() to evaluate any supported metrics.
+* You can call iqm\_all() to evaluate *every* metrics on a given pair of images.
+* To get a cell array of names of available metrics, call iqm\_names() without arguments.
 
 *Refer to source files for in-source documentation and implementation details.*
 
@@ -51,6 +53,7 @@ Example:
 >>iqm('PSNR', img, img_ref)         % Evaluates PSNR
 >>iqm('NIQE', img)                  % Evaluates NIQE
 >>iqm('MDQE', blurred, deblurred)   % Evaluates MDQE
+>>iqm_all('blurred.png', 'deblurred.png') % Evaluates every metrics, return them in an array.
 ```
 
 **Due to size limit, CORNIA/LIVE_soft_svm_model.mat is ignored in repository.

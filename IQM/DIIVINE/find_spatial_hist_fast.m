@@ -11,7 +11,7 @@ function [b, rho, ypred, matrix, xval] = find_spatial_hist_fast(orig_img)
     rho = zeros(1, 1+floor((max_x-1)/ss_fact));
     for j = 1:ss_fact:max_x
         matrix = zeros(nbins);
-        for i = 1:nbins
+        parfor i = 1:nbins
             [r, c] = find(x==bins(i));
             if ~isempty(r)
                 h = zeros(1, nbins);

@@ -56,11 +56,9 @@ function f = divine_feature_extract(im)
     f = [f cs_val];
     %% Spatial Correlation
     b = zeros(5, floor(length(subband)/2));
-	t_start = cputime;
     for i = 1:length(subband)/2
         b(:, i) = find_spatial_hist_fast(reshape(subband{i},(size_band(i,:)))); % OPT
     end
-    fprintf('==>>find_spatial_hist_fast took %f seconds\n', cputime - t_start);
     f = [f b(:)'];
     %%  Orientation feature...
     clear cs_val

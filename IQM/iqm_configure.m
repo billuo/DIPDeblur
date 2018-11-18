@@ -40,10 +40,11 @@ function iqm_configure(varargin)
         iqm_svm_scale = fullfile(iqm_path, 'Utilities', 'libsvm-3.1', 'windows', 'svm-scale.exe');
         iqm_svm_predict = fullfile(iqm_path, 'Utilities', 'libsvm-3.1', 'windows', 'svm-predict.exe');
     end
-    %% Compile PyrTools
+    %% Compile PyrTools to improve speed (and reduce warnings)
     disp('Compiling PyrTools...');
     old_cd = cd(fullfile(iqm_path, 'Utilities', 'matlabPyrTools', 'MEX'));
     compilePyrTools();
+    copyfile('*.mex*', '..'); % override those implementations in pure matlab
     cd(old_cd);
     warning(old_warning); % Restore warning
     %% Initialize name-handle map
@@ -54,9 +55,11 @@ function iqm_configure(varargin)
     for name = names
         iqm_function_handles(char(name)) = eval(['@iqm_', lower(char(name))]);
     end
-    %% Starting parpool
-    parpool(maxNumCompThreads);
-    %%% Test them
+    %% Start parallel pool if none present
+    if isempty(gcp('nocreate'))
+        parpool(maxNumCompThreads);
+    end
+    %% Test metrics
     if do_test
         iqm_test();
     end

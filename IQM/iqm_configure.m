@@ -7,16 +7,17 @@ function iqm_configure(varargin)
     else
         do_test = false;
     end
-    %% Add current folder to Matlab search path
+    %% Add current folder to Matlab search path    
+    %%% Turn off rmpath and mex compiler warning
+    old_warning = warning('off');
     disp('Adding search path...');
     global iqm_path;
     [iqm_path, ~, ~] = fileparts(which(mfilename));
-    old_warning = warning('off'); % Turn off mex compiling warning
     rmpath(genpath(iqm_path));
     addpath(iqm_path);
-    savepath(); % only save the path to this file
-    addpath(genpath(fullfile(iqm_path, 'Utilities')));
-    rmpath(fullfile(iqm_path, 'Utilities', 'libsvm'));
+    addpath(genpath(fullfile(iqm_path)));
+    rmpath(fullfile(iqm_path, 'Utilities', 'libsvm-3.1'));
+    savepath(); % just save them all...
     %% Compile SVM if necessary
     disp('Compiling LibSVM...');
     %%% SVM binaries to be used by some of the no-reference metrics.
@@ -44,9 +45,11 @@ function iqm_configure(varargin)
     disp('Compiling PyrTools...');
     old_cd = cd(fullfile(iqm_path, 'Utilities', 'matlabPyrTools', 'MEX'));
     compilePyrTools();
+    delete ('../*.mex*');
     copyfile('*.mex*', '..'); % override those implementations in pure matlab
     cd(old_cd);
-    warning(old_warning); % Restore warning
+    %%% Restore warning
+    warning(old_warning); 
     %% Initialize name-handle map
     names = ["MSE", "SNR", "PSNR", "WSNR", "SSIM", "MSSSIM", "VIF", "IFC", "NQM", "UIQI", ... <-FR
         "NIQE", "MDQE", "BLIINDS2", "BRISQUE", "DIIVINE", "SSEQ", "BIQI", "CORNIA"]; % <- NR
@@ -66,12 +69,12 @@ function iqm_configure(varargin)
 end
 
 %% Metric bindings
-%#ok<*DEFNU> %functions below are mostly called through handles
-% NOTE they all get preprocessed images with dynamic range of 1.0 (double).
+%#ok<*DEFNU> %functions below are called through handles
+% NOTE their arguments are preprocessed images with a dynamic range 0.0 ~ 1.0 (in double).
 
 %%% Full-referenced ones
 
-% These are implemented trivially
+% These three are implemented trivially
 function [MSE] = iqm_mse(img, img_ref)
     MSE = mean(mean2(((img - img_ref).*255).^2));
 end
@@ -84,51 +87,50 @@ function [PSNR] = iqm_psnr(img, img_ref)
     [PSNR, ~] = psnr(img, img_ref, 1);
 end
 
-% Bind to submodules
 function [WSNR] = iqm_wsnr(img, img_ref)
-    global iqm_path;
-    module_name = 'NQM';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'NQM';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     WSNR = wsnr_new_modified(img_ref, img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [SSIM] = iqm_ssim(img, img_ref)
-    global iqm_path;
-    module_name = 'SSIM';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'SSIM';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     SSIM = ssim_index(img_ref, img, [], [], 1.0);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [MSSSIM] = iqm_msssim(img, img_ref)
-    global iqm_path;
-    module_name = 'MSSSIM';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'MSSSIM';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     MSSSIM = mssim_index(img_ref, img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [VIF] = iqm_vif(img, img_ref)
-    global iqm_path;
-    module_name = 'VIF';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'VIF';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     VIF = vifvec(img_ref, img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [IFC] = iqm_ifc(img, img_ref)
-    global iqm_path;
-    module_name = 'IFC';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'IFC';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     IFC = ifcvec(img_ref, img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [NQM] = iqm_nqm(img, img_ref)
-    global iqm_path;
-    module_name = 'NQM';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'NQM';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     % Viewing angle (in degrees) is determined based on the assumption that
     % the image is viewed at 3.5 picture heights away
     viewing_angle = 1/3.5 * 180 / pi;
@@ -136,97 +138,96 @@ function [NQM] = iqm_nqm(img, img_ref)
     % of the horizonal and vertical dimensions
     dim = sqrt(numel(img_ref));
     NQM = nqm_modified(img_ref, img, viewing_angle, dim);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [UIQI] = iqm_uiqi(img, img_ref)
-    global iqm_path;
-    module_name = 'UIQI';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'UIQI';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     UIQI = img_qi(img_ref, img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 %%% No-referenced ones
 
 function [BLIINDS2] = iqm_bliinds2(img)
-    global iqm_path;
-    module_name = 'BLIINDS2';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'BLIINDS2';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     features = bliinds2_feature_extraction(img);
     BLIINDS2 = bliinds_prediction(features(:)');
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [NIQE] = iqm_niqe(img)
     global iqm_path;
-    module_name = 'NIQE';
-    addpath(genpath(fullfile(iqm_path, module_name)));
-    load('modelparameters.mat', 'mu_prisparam', 'cov_prisparam');
+%     module_name = 'NIQE';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
+    load(fullfile(iqm_path, 'NIQE', 'modelparameters.mat'), 'mu_prisparam', 'cov_prisparam');
     blocksizerow = 96;
     blocksizecol = 96;
     blockrowoverlap = 0;
     blockcoloverlap = 0;
     NIQE = computequality(img, blocksizerow, blocksizecol, blockrowoverlap, blockcoloverlap, ...
         mu_prisparam, cov_prisparam);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [MDQE] = iqm_mdqe(img_blurred, img_deblurred)
-    global iqm_path;
-    module_name = 'MDQE';
-    assert(size(img_blurred, 3) == 3);
-    assert(size(img_deblurred, 3) == 3);
-    assert(mean(mean2(img_blurred)) <= 1, sprintf('mean=%f\n', mean2(img_blurred)));
-    assert(mean(mean2(img_deblurred)) <= 1, sprintf('mean=%f\n', mean2(img_deblurred)));
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'MDQE';
+%     assert(size(img_blurred, 3) == 3);
+%     assert(size(img_deblurred, 3) == 3);
+%     assert(mean(mean2(img_blurred)) <= 1, sprintf('mean=%f\n', mean2(img_blurred)));
+%     assert(mean(mean2(img_deblurred)) <= 1, sprintf('mean=%f\n', mean2(img_deblurred)));
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     MDQE = measure(img_deblurred, img_blurred);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [BRISQUE] = iqm_brisque(img)
-    global iqm_path;
-    module_name = 'BRISQUE';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'BRISQUE';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     BRISQUE = brisquescore(img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [DIIVINE] = iqm_diivine(img)
-    global iqm_path;
-    module_name = 'DIIVINE';
-    addpath(genpath(fullfile(iqm_path, module_name)));
-    assert(size(img, 3) == 1);
+%     global iqm_path;
+%     module_name = 'DIIVINE';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     DIIVINE = divine(img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [SSEQ] = iqm_sseq(img)
-    global iqm_path;
-    module_name = 'SSEQ';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'SSEQ';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     SSEQ = sseq(img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [BIQI] = iqm_biqi(img)
-    global iqm_path;
-    module_name = 'BIQI';
-    addpath(genpath(fullfile(iqm_path, module_name)));
+%     global iqm_path;
+%     module_name = 'BIQI';
+%     addpath(genpath(fullfile(iqm_path, module_name)));
     BIQI = biqi(img);
-    rmpath(genpath(fullfile(iqm_path, module_name)));
+%     rmpath(genpath(fullfile(iqm_path, module_name)));
 end
 
 function [CORNIA] = iqm_cornia(img)
     global iqm_path;
-    module_name = 'CORNIA';
-    old_cd = cd;
-    cd(fullfile(iqm_path, module_name));
-    load('CSIQ_codebook_BS7.mat','codebook0');
-    load('LIVE_soft_svm_model.mat','soft_model','soft_scale_param');
-    load('CSIQ_whitening_param.mat','M','P');
+%     module_name = 'CORNIA';
+%     old_cd = cd;
+%     cd(fullfile(iqm_path, module_name));
+    load(fullfile(iqm_path, 'CORNIA', 'CSIQ_codebook_BS7.mat'),'codebook0');
+    load(fullfile(iqm_path, 'CORNIA', 'LIVE_soft_svm_model.mat'),'soft_model','soft_scale_param');
+    load(fullfile(iqm_path, 'CORNIA', 'CSIQ_whitening_param.mat'),'M','P');
     CORNIA = cornia(img, codebook0, 'soft', soft_model, soft_scale_param, M, P, 10000);
-    cd(old_cd);
+%     cd(old_cd);
 end
 
 %{

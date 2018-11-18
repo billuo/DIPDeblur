@@ -1,36 +1,29 @@
 
 *.swp
 *.m~
+*.o
 
 IQM/FRIQUEE/
 IQM/HOSA/
 IQM/ILNIQE/
 IQM/VIFP/
 IQM/VSNR/
+
 IQM/CORNIA/LIVE_soft_svm_model.mat
 
 IQM/Utilities/libsvm-3\.1/svm-predict
-
 IQM/Utilities/libsvm-3\.1/svm-scale
-
 IQM/Utilities/libsvm-3\.1/svm-train
-
 IQM/Utilities/libsvm-3\.1/matlab/libsvmread\.mexa64
-
 IQM/Utilities/libsvm-3\.1/matlab/libsvmwrite\.mexa64
-
 IQM/Utilities/libsvm-3\.1/matlab/svmpredict\.mexa64
-
 IQM/Utilities/libsvm-3\.1/matlab/svmtrain\.mexa64
-
-*.o
 
 IQM/BIQI/test_ind_scaled
 
 IQM/BRISQUE/dump
-
 IQM/BRISQUE/output
-
 IQM/BRISQUE/test
-
 IQM/BRISQUE/test\.scaled
+
+IQM/Utilities/matlabPyrTools/*.mex*

@@ -8,11 +8,11 @@ They are released by authors of the corresponding essays!
 | directory | contents |
 | --------- | -------- |
 | DeepDeblur\_release | Torch implementation of model in *Deep Multi-Scale Convolutional Neural Network for Dynamic Scene Deblurring* |
-| TODO | *The essay* |
+| SRN-Deblur-master | *Scale-recurrent Network for Deep Image Deblurring* |
 
 ## Evaluation Result Overview
 
-A brief overview of these models evaluated by a variety of image quality metrics (average value):  
+A brief overview of these models evaluated by a variety of image quality metrics (average value):
 
 | Model | PSNR | WSNR | SSIM | MSSSIM | IFC | NQM | UIQI | VIF | BIQI | BLIINDS2 | BRISQUE | CORNIA | DIIVINE | NIQE | SSEQ | MDQE |
 | -------- | ---- | ---- | ---- | ------ | --- | --- | ---- | --- | ---- | -------- | ------- | ------ | ------- | ---- | ---- | ---- |

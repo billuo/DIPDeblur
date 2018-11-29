@@ -27,4 +27,6 @@ Read ./README.md for detailed description on how to run the code.
 
 ## SRN
 
-TODO
+Evaluation result is stored in ./dataset/SRN\_metrics\_result.zip,
+using the trained model given in ./README.md.
+Read ./README.md for detailed description on how to run the code.

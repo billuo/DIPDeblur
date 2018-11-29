@@ -13,6 +13,7 @@ They are released by authors of the corresponding essays!
 ## Evaluation Result Overview
 
 A brief overview of these models evaluated by a variety of image quality metrics (average value):  
+
 | Model | PSNR | WSNR | SSIM | MSSSIM | IFC | NQM | UIQI | VIF | BIQI | BLIINDS2 | BRISQUE | CORNIA | DIIVINE | NIQE | SSEQ | MDQE |
 | -------- | ---- | ---- | ---- | ------ | --- | --- | ---- | --- | ---- | -------- | ------- | ------ | ------- | ---- | ---- | ---- |
 | SRN | 27.51 | 24.96 | 0.85 | 0.90 | 3.13 | 23.18 | 0.70 | 0.56 | 36.33 | 39.10 | 116.30 | 124.30 | 52.87 | 19.99 | 48.45 | -10.52 |

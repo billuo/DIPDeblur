@@ -20,13 +20,17 @@ A brief overview of these models evaluated by a variety of image quality metrics
 | DeepDeblur | 26.62 | 23.85 | 0.84 | 0.90 | 2.82 | 20.70 | 0.66 | 0.57 | 33.60 | 38.39 | 116.33 | 124.24 | 52.30 | 19.95 | 47.99 | -10.12 |
 
 ## DeepDeblur\_release
-Evaluation result is computed by ./compute\_metrics.mat
-and stored in ./dataset/GOPRO\_Large-test.zip,
-using the trained model given in ./README.md.
-Read ./README.md for detailed description on how to run the code.
+Evaluation result is computed by *./compute\_metrics.mat*
+and stored in *./dataset/GOPRO\_Large-test.zip*,
+using the trained model given in *./README.md*.  
+Read **./README.md** for detailed description on how to run the code.  
+The deblurred images used in computation can be downloaded at:  
+https://pan.baidu.com/s/1d96gG--1B7a0lQg2tdBdlQ
 
 ## SRN
 
-Evaluation result is stored in ./dataset/SRN\_metrics\_result.zip,
-using the trained model given in ./README.md.
-Read ./README.md for detailed description on how to run the code.
+Evaluation result is stored in *./dataset/SRN\_metrics\_result.zip*,
+using the trained model given in *./README.md*.  
+Read **./README.md** for detailed description on how to run the code.  
+The deblurred images used in computation can be downloaded at:  
+https://pan.baidu.com/s/18hL6yPL1zicIMRlBuedpAw

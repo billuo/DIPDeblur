@@ -5,7 +5,8 @@ For group project of Digital Image Processing on blind image deblurring.
 
 | directory | description |
 | :-------: |-------------|
-| IQM | Image Quality Metric Matlab toolbox|
+| IQM | Image Quality Metric Matlab toolbox |
+| etc | Codes and results of evaluated models |
 
 ## IQM
 

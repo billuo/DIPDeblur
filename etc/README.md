@@ -1,4 +1,4 @@
-# etc
+# Summary of Assessment 
 This directory contains the code for models we evaluated together with the evaluation result,
 each in a self contained subdirectory.  
 They are released by authors of the corresponding essays!

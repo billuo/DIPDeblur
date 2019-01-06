@@ -48,6 +48,14 @@ A brief overview of these models evaluated by a variety of image quality metrics
 |NIQE |19.6641  |19.3546  |19.1597     |
 |SSEQ |39.0832  |32.5474  |28.2454     |
 
+### Kohler dataset: 
+
+| Model     | PSNR  | WSNR  | SSIM | MSSSIM | IFC  | NQM   | UIQI | VIF  | BIQI  | BLIINDS2 | BRISQUE | CORNIA | DIIVINE | NIQE  | SSEQ  | MDQE   |
+| -----     | ----  | ----  | ---- | ------ | ---- | ----  | ---- | ---- | ----- | -------- | ------- | ------ | ------- | ----- | ----- | -----  |
+| DeepDeblur|       |       |      |        |      |       |      |      |       |          |         |        |         |       |       |        |
+| SRN       |       |       |      |        |      |       |      |      |       |          |         |        |         |       |       |        |
+| DeblurGAN |24.0729|15.5383|0.7277|0.7740  |0.9957|13.3327|0.3412|0.3340|62.4675|26.8854   |116.8132 |125.6233|52.4069  |19.8184|35.5722|-15.4098|
+
 ## DeepDeblur\_release
 Evaluation result is computed by *./compute\_metrics.mat*
 and stored in *./dataset/GOPRO\_Large-test.zip*,
